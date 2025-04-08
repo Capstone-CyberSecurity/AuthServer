@@ -16,7 +16,7 @@ public class HeartbeatServer : IServer
 
     public void MonitorSession(ClientSession session)
     {
-        Console.WriteLine("초마다 핑 보내서 보내는거 실패하면 해제 상태 확인");
+        Console.WriteLine("Heartbeat.cs 초마다 핑 보내서 보내는거 실패하면 해제 상태 확인");
         Task.Run(async () =>
         {
             while (session.Client.Connected)

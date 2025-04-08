@@ -16,7 +16,7 @@ public class AuthenticationServer : IServer
 
     public void HandleSession(ClientSession clientSession)
     {
-        Console.WriteLine("여기에 인증 관련 로직 추가");
+        Console.WriteLine("AuthServer.cs 여기에 인증 관련 로직 추가");
         Task.Run(async () =>
         {
             

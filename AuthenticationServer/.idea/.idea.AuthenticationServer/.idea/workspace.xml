@@ -9,7 +9,8 @@
   <component name="ChangeListManager">
     <list default="true" id="e8d9f9f8-df05-437a-a385-29b933de19ed" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.AuthenticationServer/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AuthenticationServer/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AuthenticationServer/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AuthenticationServer/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuthenticationServer/Network/AuthenticationServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AuthenticationServer/Network/AuthenticationServer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AuthenticationServer/Network/HeartbeatServer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AuthenticationServer/Network/HeartbeatServer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,20 +41,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    ".NET Project.AuthenticationServer.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;.NET Project.AuthenticationServer.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="AuthenticationServer" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -83,7 +84,9 @@
       <option name="presentableId" value="Default" />
       <updated>1743926525865</updated>
       <workItem from="1743926526999" duration="4000" />
-      <workItem from="1743927686305" duration="10169000" />
+      <workItem from="1743927686305" duration="10273000" />
+      <workItem from="1744124746375" duration="216000" />
+      <workItem from="1744127892281" duration="69000" />
     </task>
     <servers />
   </component>
