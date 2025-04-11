@@ -1,10 +1,11 @@
-namespace AuthenticationServer.Network;
+﻿namespace AuthenticationServer.Network;
 
-public class ListenServer : IServer
+public class ListenServer(ServerManager serverManager) : IServer
 {
+    private ServerManager _serverManager = serverManager;
     private TcpListener _listener;
     public event Action<TcpClient> OnClientConnected;
-    
+
     public void Init()
     {
         _listener = new TcpListener(IPAddress.Any, 39990);

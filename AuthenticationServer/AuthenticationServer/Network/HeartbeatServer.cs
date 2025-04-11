@@ -1,9 +1,9 @@
-namespace AuthenticationServer.Network;
+﻿namespace AuthenticationServer.Network;
 
-public class HeartbeatServer : IServer
+public class HeartbeatServer(ServerManager serverManager) : IServer
 {
-    public List<ClientSession> Sessions = new List<ClientSession>();
-    
+    private ServerManager _serverManager = serverManager;
+
     public void Init()
     {
         
