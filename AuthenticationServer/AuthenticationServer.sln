@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationServer", "AuthenticationServer\AuthenticationServer.csproj", "{6A707760-D5AC-4714-8BB7-84FFDE5A383B}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35208.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationServer", "AuthenticationServer\AuthenticationServer.csproj", "{6A707760-D5AC-4714-8BB7-84FFDE5A383B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationClient", "..\AuthenticationClient\AuthenticationClient\AuthenticationClient.csproj", "{98B3792F-4AA0-43D2-9D05-8DE889E9AE15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +17,12 @@ Global
 		{6A707760-D5AC-4714-8BB7-84FFDE5A383B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A707760-D5AC-4714-8BB7-84FFDE5A383B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A707760-D5AC-4714-8BB7-84FFDE5A383B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98B3792F-4AA0-43D2-9D05-8DE889E9AE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98B3792F-4AA0-43D2-9D05-8DE889E9AE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98B3792F-4AA0-43D2-9D05-8DE889E9AE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98B3792F-4AA0-43D2-9D05-8DE889E9AE15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

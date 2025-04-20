@@ -5,6 +5,11 @@ public class Program
     {
         ServerManager serverManager = new ServerManager();
         
-        serverManager.Start();
+        Task.Run(() => serverManager.Start());
+
+        while (true)
+        {
+
+        }
     }
 }

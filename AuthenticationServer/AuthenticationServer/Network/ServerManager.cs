@@ -23,26 +23,32 @@ public class ServerManager : Singleton<ServerManager>
         //이벤트 Binding 시도
 
         //처음 클라이언트가 접속했을 때
-        _listenServer.OnClientConnected += (client) =>
+        _listenServer.OnClientConnected += async (client) =>
         {
             ClientSession session = new ClientSession(client);
-            if(_authServer.LoginSession(session))
+            if(await _listenServer.LoginSession(session))
                 Sessions.Add(session);
             //_heartbeatServer.MonitorSession(session);
         };
     }
 
-    public void Start()
+    public async Task Start()
     {
         _listenServer.Init();
         _authServer.Init();
         _heartbeatServer.Init();
 
-        while (true)
-        {
-            _listenServer.Update();
-        }
+        /*await _listenServer.Update();
+            await _authServer.Update();
+            await _heartbeatServer.Update();
+             */
+        // Await 쓰면 비동기지만 return이 나올 때까지 계속 돌기 때문에 Thread 계속 점유 문제 존재
+        // 각 Update를 병렬로 실행
+        var listen = _listenServer.Update();
+        var auth = _authServer.Update();
+        var heartbeat = _heartbeatServer.Update();
 
-        return;
+        // 모두 비동기로 병렬 실행되게 대기
+        await Task.WhenAll(listen, auth, heartbeat);
     }
 }
