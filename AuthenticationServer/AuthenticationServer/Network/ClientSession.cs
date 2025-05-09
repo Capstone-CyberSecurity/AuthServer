@@ -8,7 +8,9 @@ public class ClientSession
     public TcpClient Client { get; private set; }
     public Crypto crypto = new Crypto();
     public NetworkStream Stream => Client.GetStream();
-    public string Id { get; set; }
+    public string Id { get; set; } // com인지 bec인지 판단
+    public string NIC { get; set; }
+    public string UID { get; set; }
 
     public ClientSession(TcpClient client)
     {
@@ -20,6 +22,9 @@ public class ClientSession
         var lengthPrefix = BitConverter.GetBytes(message.Length); // 4바이트 길이
         if (BitConverter.IsLittleEndian)
             Array.Reverse(lengthPrefix); // 네트워크 바이트 오더로 (big endian)
+
+        //전송할 패킷 출력
+        //Console.WriteLine($"전송할 HEX: {BitConverter.ToString(message)}");
 
         await Stream.WriteAsync(lengthPrefix, 0, lengthPrefix.Length); // 길이 먼저 보내기
         await Stream.WriteAsync(message, 0, message.Length);           // 실제 데이터 전송
@@ -36,6 +41,9 @@ public class ClientSession
 
         var messageBuffer = new byte[messageLength];
         await ReadExactAsync(messageBuffer, 0, messageLength); // 전체 메시지 읽기
+
+        //받은 패킷 출력
+        //Console.WriteLine($"받은 HEX: {BitConverter.ToString(messageBuffer)}");
 
         return messageBuffer;
     }

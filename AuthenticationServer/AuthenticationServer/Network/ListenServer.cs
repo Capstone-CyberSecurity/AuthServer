@@ -29,7 +29,7 @@ public class ListenServer(ServerManager serverManager) : IServer
         Console.WriteLine("ListenServer.cs 로그인 관련 작업");
         try
         {
-RCV:
+        RCV:
             byte[] message = await clientSession.ReceiveBytesAsync();
             Packet packetRcv = Packet.FromBytes(message);
 
@@ -45,7 +45,6 @@ RCV:
                 Packet packet = new Packet { packetType = PacketType.LOGIN_OK, data = clientSession.crypto.GetPublicKeyBytes() };
                 await clientSession.SendBytesAsync(packet.ToBytes());
                 Console.WriteLine(clientSession.Client.Client.RemoteEndPoint + " [Login Session] Accept Login called: " + clientSession.Id);
-                goto RCV;
             }
             else if (packetRcv.packetType == PacketType.KEY)
             {
@@ -57,13 +56,37 @@ RCV:
                 Packet packetSend = new Packet { packetType = PacketType.CONNECT, data = new byte[1] { 0x00 } };
                 await clientSession.SendBytesAsync(packetSend.ToBytes());
                 Console.WriteLine(clientSession.Id + " [Login Session] Get AES key");
-                return true;
+            }
+            else if(packetRcv.packetType == PacketType.NIC)
+            {
+                //패킷 복호화
+                byte[] decrypt = clientSession.crypto.AesGcmDecrypt(packetRcv.IV, packetRcv.data, packetRcv.tag);
+
+                string nicData = Encoding.UTF8.GetString(decrypt);
+                clientSession.NIC = nicData;
+                Console.WriteLine($"클라이언트 {clientSession.Id} NIC 등록: {nicData}");
+            }
+            else if(packetRcv.packetType == PacketType.UID)
+            {
+                //패킷 복호화
+                byte[] decrypt = clientSession.crypto.AesGcmDecrypt(packetRcv.IV, packetRcv.data, packetRcv.tag);
+
+                string uidData = Encoding.UTF8.GetString(decrypt);
+                clientSession.UID = uidData;
+                Console.WriteLine($"클라이언트 {clientSession.Id} NIC 등록: {uidData}");
             }
             else
             {
                 _serverManager.Sessions.Remove(clientSession);
                 return false;
             }
+
+            if (clientSession.Id != null && clientSession.UID != null && clientSession.NIC != null)
+            {
+                return true;
+            }
+
+            goto RCV;
         }
         catch (Exception ex)
         {
