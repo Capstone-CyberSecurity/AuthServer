@@ -8,9 +8,10 @@ public class ClientSession
     public TcpClient Client { get; private set; }
     public Crypto crypto = new Crypto();
     public NetworkStream Stream => Client.GetStream();
-    public string Id { get; set; } // comì¸ì§€ becì¸ì§€ íŒë‹¨
+    public string Id { get; set; } // comÀÎÁö becÀÎÁö ÆÇ´Ü
     public string NIC { get; set; }
     public string UID { get; set; }
+    public string HASH { get; set; }
 
     public ClientSession(TcpClient client)
     {
@@ -19,31 +20,31 @@ public class ClientSession
 
     public async Task SendBytesAsync(byte[] message)
     {
-        var lengthPrefix = BitConverter.GetBytes(message.Length); // 4ë°”ì´íŠ¸ ê¸¸ì´
+        var lengthPrefix = BitConverter.GetBytes(message.Length); // 4¹ÙÀÌÆ® ±æÀÌ
         if (BitConverter.IsLittleEndian)
-            Array.Reverse(lengthPrefix); // ë„¤íŠ¸ì›Œí¬ ë°”ì´íŠ¸ ì˜¤ë”ë¡œ (big endian)
+            Array.Reverse(lengthPrefix); // ³×Æ®¿öÅ© ¹ÙÀÌÆ® ¿À´õ·Î (big endian)
 
-        //ì „ì†¡í•  íŒ¨í‚· ì¶œë ¥
-        //Console.WriteLine($"ì „ì†¡í•  HEX: {BitConverter.ToString(message)}");
+        //Àü¼ÛÇÒ ÆĞÅ¶ Ãâ·Â
+        //Console.WriteLine($"Àü¼ÛÇÒ HEX: {BitConverter.ToString(message)}");
 
-        await Stream.WriteAsync(lengthPrefix, 0, lengthPrefix.Length); // ê¸¸ì´ ë¨¼ì € ë³´ë‚´ê¸°
-        await Stream.WriteAsync(message, 0, message.Length);           // ì‹¤ì œ ë°ì´í„° ì „ì†¡
+        await Stream.WriteAsync(lengthPrefix, 0, lengthPrefix.Length); // ±æÀÌ ¸ÕÀú º¸³»±â
+        await Stream.WriteAsync(message, 0, message.Length);           // ½ÇÁ¦ µ¥ÀÌÅÍ Àü¼Û
     }
 
     public async Task<byte[]> ReceiveBytesAsync()
     {
         var lengthBuffer = new byte[4];
-        await ReadExactAsync(lengthBuffer, 0, 4); // ê¸¸ì´ ë¨¼ì € ì½ê¸°
+        await ReadExactAsync(lengthBuffer, 0, 4); // ±æÀÌ ¸ÕÀú ÀĞ±â
 
         if (BitConverter.IsLittleEndian)
             Array.Reverse(lengthBuffer);
         int messageLength = BitConverter.ToInt32(lengthBuffer, 0);
 
         var messageBuffer = new byte[messageLength];
-        await ReadExactAsync(messageBuffer, 0, messageLength); // ì „ì²´ ë©”ì‹œì§€ ì½ê¸°
+        await ReadExactAsync(messageBuffer, 0, messageLength); // ÀüÃ¼ ¸Ş½ÃÁö ÀĞ±â
 
-        //ë°›ì€ íŒ¨í‚· ì¶œë ¥
-        //Console.WriteLine($"ë°›ì€ HEX: {BitConverter.ToString(messageBuffer)}");
+        //¹ŞÀº ÆĞÅ¶ Ãâ·Â
+        //Console.WriteLine($"¹ŞÀº HEX: {BitConverter.ToString(messageBuffer)}");
 
         return messageBuffer;
     }
@@ -65,7 +66,7 @@ public class ClientSession
     {
         var lengthBuffer = new byte[4];
 
-        // 1. ê¸¸ì´ ë¨¼ì € ì½ê¸°
+        // 1. ±æÀÌ ¸ÕÀú ÀĞ±â
         await ReadExactAsync(lengthBuffer, 0, 4, cancellationToken);
 
         if (BitConverter.IsLittleEndian)
@@ -73,7 +74,7 @@ public class ClientSession
 
         int messageLength = BitConverter.ToInt32(lengthBuffer, 0);
 
-        // 2. ë³¸ë¬¸ ì½ê¸°
+        // 2. º»¹® ÀĞ±â
         var messageBuffer = new byte[messageLength];
         await ReadExactAsync(messageBuffer, 0, messageLength, cancellationToken);
 

@@ -66,7 +66,7 @@ public class ListenServer(ServerManager serverManager) : IServer
                 clientSession.NIC = nicData;
                 Console.WriteLine($"클라이언트 {clientSession.Id} NIC 등록: {nicData}");
             }
-            else if(packetRcv.packetType == PacketType.UID)
+            /*else if(packetRcv.packetType == PacketType.UID)
             {
                 //패킷 복호화
                 byte[] decrypt = clientSession.crypto.AesGcmDecrypt(packetRcv.IV, packetRcv.data, packetRcv.tag);
@@ -74,14 +74,15 @@ public class ListenServer(ServerManager serverManager) : IServer
                 string uidData = Encoding.UTF8.GetString(decrypt);
                 clientSession.UID = uidData;
                 Console.WriteLine($"클라이언트 {clientSession.Id} NIC 등록: {uidData}");
-            }
+            }*/
             else
             {
                 _serverManager.Sessions.Remove(clientSession);
                 return false;
             }
 
-            if (clientSession.Id != null && clientSession.UID != null && clientSession.NIC != null)
+            //Listen 탈출조건
+            if (clientSession.Id != null && clientSession.NIC != null)
             {
                 return true;
             }

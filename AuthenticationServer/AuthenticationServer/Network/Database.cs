@@ -6,15 +6,37 @@ using System.Threading.Tasks;
 
 namespace AuthenticationServer.Network
 {
-    class Database
+    public class Database
     {
         private TcpClient _client;
         private NetworkStream _stream;
+        private static Database? _instance;
+        private static object _lock = new object();
+
+        private Database() { }
+
+        public static Database Instance { 
+            get 
+            {
+                if (_instance == null)
+                {
+                    lock (_lock)
+                    {
+                        if (_instance == null)
+                        {
+                            _instance = new Database();
+                        }
+                    }
+                }
+                return _instance;
+            } 
+        }
 
         public bool IsConnected => _client?.Connected ?? false;
 
         public async Task ConnectAsync(string host, int port)
         {
+            Console.WriteLine("접속시도");
             _client = new TcpClient();
             try
             {

@@ -15,6 +15,9 @@ public enum PacketType : int
     CONNECT = 0x0020,
     HEART = 0x0021,
     BEAT = 0x0022,
+    DBCHECK_REC = 0x0030,
+    DBCHECK_VAL = 0x0031,
+    ORDER_TO_CLI = 0x0040
 }
 
 public class Packet

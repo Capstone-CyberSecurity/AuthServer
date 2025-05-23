@@ -65,5 +65,21 @@ namespace AuthenticationServer.Utility
         // AES-GCM 키, IV 생성
         public static byte[] GenerateRandomKey(int size = 32) => RandomNumberGenerator.GetBytes(size);
         public static byte[] GenerateRandomIV(int size = 12) => RandomNumberGenerator.GetBytes(size);
+
+        public string DoSha256(string rawData)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(rawData);
+                byte[] hasBytes = sha256.ComputeHash(bytes);
+
+                StringBuilder builder = new StringBuilder();
+                foreach (byte b in hasBytes) {
+                    builder.Append(b.ToString("x2"));
+                }
+
+                return builder.ToString();
+            }
+        }
     }
 }

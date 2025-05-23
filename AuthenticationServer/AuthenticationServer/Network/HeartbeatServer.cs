@@ -44,12 +44,29 @@ public class HeartbeatServer(ServerManager serverManager) : IServer
                 //핑 응답 확인
                 byte[] rcvMessage = await clientSession.ReceiveBytesAsync(cts.Token);
                 Packet rcvPacket = Packet.FromBytes(rcvMessage);
+
+                //복호화 작업
+                byte[] rcvByte = clientSession.crypto.AesGcmDecrypt(
+                    rcvPacket.IV, rcvPacket.data, rcvPacket.tag);
+                
                 Console.WriteLine(rcvPacket.packetType);
 
                 if (rcvPacket.packetType == PacketType.BEAT)
                 {
-                    Console.WriteLine("[Heartbeat] Get Response: " + clientSession.Id);
-                    return;
+                    //bec에서 온 건 hash값이니 따로 등록
+                    if(clientSession.Id.Contains("bec"))
+                    {
+                        clientSession.HASH = BitConverter.ToString(rcvByte).Replace("-", "").ToLower();
+                        Console.WriteLine("[Heartbeat] Get Response: " + clientSession.Id + "/ HASH: "+ clientSession.HASH);
+                        return;
+                    }
+                    else
+                    {
+                        string rcvData = Encoding.UTF8.GetString(rcvByte);
+                        clientSession.NIC = rcvData;
+                        Console.WriteLine("[Heartbeat] Get Response: " + clientSession.Id + "/ NIC: " + clientSession.NIC);
+                        return;
+                    }
                 }
             }
         }
@@ -58,5 +75,19 @@ public class HeartbeatServer(ServerManager serverManager) : IServer
             Console.WriteLine("Session Disconnected or Timeout: " + clientSession.Id + " " + ex.Message);
             _serverManager.Sessions.Remove(clientSession);
         }
+    }
+
+    private ClientSession searchClient(string nic_computer)
+    {
+        //클라 테이블에서 검색 진행해서 추출
+        var sessions = _serverManager.Sessions.ToList();
+        foreach (var session in sessions)
+        {
+            if (session.NIC == nic_computer)
+            {
+                return session;
+            }
+        }
+        return null;
     }
 }
