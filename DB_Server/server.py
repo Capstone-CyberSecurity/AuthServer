@@ -108,14 +108,19 @@ def handle_client(client_socket, addr, port):
         # 인증서버용 포트
         elif port == 9999:
             auth_key = data_json.get("uid_mac_hash", "").strip()
-            print("AUTH: " + auth_key)
             if not auth_key:
+                print("[Auth] 필수 값 누락")
                 client_socket.sendall(json.dumps({"error": "필수 값 누락"}).encode())
                 return
             with db.cursor() as cursor:
                 cursor.execute("SELECT computer_mac FROM access_control WHERE auth_key = %s", (auth_key,))
                 result = cursor.fetchone()
-            client_socket.sendall(result["computer_mac"].encode() if result else b"Non")
+            
+            corr_com_mac = result["computer_mac"].encode() if result else b"Non"
+            now = datetime.now()
+            
+            print(now.strftime("%Y-%m-%d %H:%M:%S") + "| [Auth] 매칭 완료: " + auth_key + " -> " + str(corr_com_mac))
+            client_socket.sendall(corr_com_mac)
 
     except Exception as e:
         client_socket.sendall(json.dumps({"error": f"서버 오류: {str(e)}"}).encode())

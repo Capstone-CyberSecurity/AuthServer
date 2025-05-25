@@ -14,8 +14,8 @@ public class AuthenticationServer(ServerManager serverManager) : IServer
     {
         while (true)
         {
-            // 일정 간격 대기 (예: 2초)
-            await Task.Delay(2000);
+            // 일정 간격 대기 (예: 1.5초)
+            await Task.Delay(1500);
 
             // 현재 세션 리스트 복사 (foreach 중간에 삭제 방지)
             var sessions = _serverManager.Sessions.ToList();
@@ -33,6 +33,10 @@ public class AuthenticationServer(ServerManager serverManager) : IServer
             if(clientSession.Id == "bec")
             {
                 string targetHash = clientSession.HASH;
+                if (string.IsNullOrEmpty(targetHash))
+                {
+                    targetHash = "Empty";
+                }
                 
 
                 //DB서버에 메시지 전송: Hash값
@@ -58,7 +62,8 @@ public class AuthenticationServer(ServerManager serverManager) : IServer
                 {
                     //패킷 직렬화 및 암호화
                     byte[] aesIV = Crypto.GenerateRandomIV();
-                    (byte[] message, byte[] tag) = nicMatchCom.crypto.AesGcmEncrypt(aesIV, new byte[4] { 0x4F, 0x70, 0x65, 0x6E });
+                    string order = "Open";
+                    (byte[] message, byte[] tag) = nicMatchCom.crypto.AesGcmEncrypt(aesIV, Encoding.UTF8.GetBytes(order));
 
                     Packet sendPacket = new Packet { packetType = PacketType.ORDER_TO_CLI, IV = aesIV, tag = tag, data = message };
 

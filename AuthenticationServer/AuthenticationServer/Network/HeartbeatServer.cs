@@ -21,8 +21,8 @@ public class HeartbeatServer(ServerManager serverManager) : IServer
             var tasks = sessions.Select(session => MonitorSession(session));
             await Task.WhenAll(tasks);
 
-            // 일정 간격 대기 (예: 5초)
-            await Task.Delay(5000);
+            // 일정 간격 대기 (예: 2초)
+            await Task.Delay(2000);
         }
     }
 
@@ -30,7 +30,7 @@ public class HeartbeatServer(ServerManager serverManager) : IServer
     {
         try
         {
-            using (var cts = new CancellationTokenSource(7000))
+            using (var cts = new CancellationTokenSource(3000))
             {
                 //패킷 직렬화 및 암호화
                 byte[] aesIV = Crypto.GenerateRandomIV();

@@ -28,6 +28,11 @@ def pop_from_com_queue():
     else:
         return None
 
+def file_io(filepath):
+    with open(filepath, 'r') as file:
+        data = file.read().strip()
+    return data
+
 class DeviceConfig:
     device_name = "Null"
     nic_mac_string = "00-00-00-00-00-00"
@@ -138,7 +143,7 @@ async def network_start(device_name, nic_mac_string, uid_string="none"):
     device = DeviceConfig()
     device.device_name = device_name
     device.nic_mac_string = nic_mac_string
-    device.uid_string = uid_string
+    device.uid_string = file_io('uid.txt')
 
     print("서버에 연결됨")
 
@@ -183,7 +188,7 @@ async def network_start(device_name, nic_mac_string, uid_string="none"):
         try:
             packet = await recv_packet(reader)
             print(f"서버에서 수신: {packet.packet_type}")
-
+            #pop 1회
             plaintext = crypto.aes_decrypt(packet.iv, packet.data, packet.tag)
             print("복호화 결과:", plaintext)
 
@@ -193,6 +198,7 @@ async def network_start(device_name, nic_mac_string, uid_string="none"):
 
                 # bec일 경우 해시 처리
                 if device.device_name == "bec":
+                    device.uid_string = file_io('uid.txt')
                     hash_input = device.uid_string+device.nic_mac_string
                     sha256 = hashlib.sha256()
                     sha256.update(hash_input.encode())
@@ -234,4 +240,11 @@ def queue_worker():
 if __name__ == "__main__":
     devicename = input("장치 이름 입력(컴 차단은 com, 비콘은 bec, DB는 dbs): ")
 
-    asyncio.run(network_start(devicename, "00-11-23-45-67-89", "2222"))
+    asyncio.run(network_start(devicename, "2C-CF-67-8F-D9-B0", "2222"))
+
+
+
+
+
+    #외부
+    #is_empty: ture false
